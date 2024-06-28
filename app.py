@@ -3,7 +3,7 @@ import pandas as pd  # read csv, df manipulation
 import plotly.express as px  # interactive charts
 import streamlit as st  # 🎈 data web app development
 
-# Estilo CSS para centrar contenido
+# Set configuracion
 
 st.set_page_config(
     page_title="Cáncer en Chile 1998-2019",
@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 
-# dashboard title
+# Dashboard title.
 st.title("Cáncer en Chile (1998-2019)")
 st.markdown(
     '<span style="font-style: italic; margin-right: 10px;">Esteban Navarro</span>'
@@ -23,19 +23,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.markdown(
-    """
-    <style>
-    body {
-        color: black;
-        background-color: white;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# st.sidebar.header('User Input Parameters')
 
 # Data
 data_cancer = pd.read_spss("rpc_chile.sav", convert_categoricals = False)
@@ -180,7 +167,7 @@ tbl_edad_descA = data_cancer2['Edad'].describe().reset_index().rename(columns = 
 tbl_edad_desc = (tbl_edad_descH.
  merge(tbl_edad_descM, how = 'left', on = 'index').
  merge(tbl_edad_descA, how = 'left', on = 'index')
- )
+ ).rename(columns = {'index': 'Indicador'})
 
 # Histograma edad
 fig_hist = px.histogram(data_cancer2, 
@@ -260,7 +247,7 @@ with placeholder.container():
                  * Total de registros: **{registros_data_cancer2}**''')
         st.write("**Diagnósticos según Registro Poblacional**")
         # st.table(tbl_diag.reset_index(drop=True))
-        st.write(tbl_diag)
+        st.dataframe(tbl_diag, hide_index=True)
         
         
     with fig_col2:
@@ -293,7 +280,7 @@ with placeholder3.container():
     col1, col2 = st.columns([1,2])
     with col1:
         st.markdown('**Estadísticos descriptivos: edad al momento del diagnóstico**')
-        st.write(tbl_edad_desc)
+        st.dataframe(tbl_edad_desc, hide_index = True)
 
     with col2:
         st.write(fig_hist)        
