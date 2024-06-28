@@ -213,7 +213,7 @@ fig_hist = px.histogram(data_cancer2,
                         hover_data=data_cancer2.columns,
                         category_orders = {'Sexo_': ['Mujer', 'Hombre']})
 fig_hist.update_layout(barmode='overlay',
-                       title='Distribución de la edad al diagnóstico, según sexo')
+                       title='Distribución de la edad al momento del diagnóstico, según sexo')
 fig_hist.update_layout(
     dragmode=False  # Deshabilita el modo de arrastre (zoom)
 )
