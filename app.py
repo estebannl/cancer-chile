@@ -217,6 +217,15 @@ fig_dif_dias.update_yaxes(range=[0, ymax])  # Establece el rango máximo del eje
 
 # UI --------------------------------------------------------------------------------
 
+# Configuración para deshabilitar todas las funciones interactivas
+config = {
+    'staticPlot': False,  # Hacer que el gráfico sea estático
+    'displayModeBar': False,  # Ocultar la barra de herramientas de modo
+    'scrollZoom': False,  # Deshabilitar el zoom con la rueda del ratón
+    'doubleClick': 'reset',  # Deshabilitar el doble clic para restablecer el zoom
+    'showTips': False,  # Deshabilitar las herramientas emergentes
+    'responsive': True  # Hacer que el gráfico sea responsivo
+}
 st.markdown(f'#### 1. Evolución diagnósticos: {option}')       
 
 # creating a single-element container
@@ -229,12 +238,13 @@ with placeholder.container():
         st.write(f'''
                  * Total de registros: **{registros_data_cancer2}**''')
         st.write("**Diagnósticos según Registro Poblacional**")
-        st.table(tbl_diag.reset_index(drop=True))
+        st.write(tbl_diag)
         # st.write("Selección:", option)
         
     with fig_col2:
         # Tabla
-        st.write(fig_diag_ano)
+        # st.write(fig_diag_ano)
+        st.plotly_chart(fig_diag_ano, config=config)
  
 
 st.markdown(f'#### 2. Características de los diagnosticados: {option}')       
