@@ -143,6 +143,9 @@ tbl_sexo = tbl_sexo.sort_values(by = "Sexo_")
 #Fig
 fig_sexo = px.pie(tbl_sexo, values='count', names='Sexo_',
                   title='Distribución por sexo')
+fig_sexo.update_layout(
+    dragmode=False  # Deshabilita el modo de arrastre (zoom)
+)
 
 # Diagnosticos por grupo de edad
 tbl_edad = data_cancer2['Grupo_edad'].value_counts().reset_index()
@@ -152,6 +155,9 @@ tbl_edad = tbl_edad.sort_values(by = 'Grupo_edad')
 fig_edad = px.bar(tbl_edad, x = 'pct', y = 'Grupo_edad',
                   title = "Distribución por grupos de edad", orientation='h',
                   text_auto=True)
+fig_edad.update_layout(
+    dragmode=False  # Deshabilita el modo de arrastre (zoom)
+)
 
 # Tabla Base diagnostico
 tbl_base_diag = data_cancer2.value_counts(['Base_diagnostico', 'Base_diagnostico_']).reset_index()
@@ -162,6 +168,9 @@ tbl_base_diag = tbl_base_diag.drop(['Base_diagnostico'], axis=1)
 fig_base_diag = px.bar(tbl_base_diag, x = 'pct', y = 'Base_diagnostico_',
                   title = "Distribución según base del diagnóstico", orientation='h',
                   text_auto=True)
+fig_base_diag.update_layout(
+    dragmode=False  # Deshabilita el modo de arrastre (zoom)
+)
 
 # Tabla Descriptivos por edad
 tbl_edad_descH = data_cancer2.query('Sexo == 1')['Edad'].describe().reset_index().rename(columns = {'Edad' : 'Hombre'})
@@ -185,6 +194,9 @@ fig_hist = px.histogram(data_cancer2,
                         hover_data=data_cancer2.columns)
 fig_hist.update_layout(barmode='overlay',
                        title='Distribución de la edad al diagnóstico, según sexo')
+fig_hist.update_layout(
+    dragmode=False  # Deshabilita el modo de arrastre (zoom)
+)
 
 # Tabla Estado hasta 2020 de pacientes diagnosticados
 tbl_estado = data_cancer2.value_counts(['Estado']).reset_index()
@@ -194,6 +206,9 @@ tbl_estado = tbl_estado.sort_values(by = "Estado")
 fig_estado = px.pie(tbl_estado, values='count', names='Estado',
                   title='Estado hasta diciembre 2020',
                   color_discrete_sequence=px.colors.qualitative.Bold_r)
+fig_estado.update_layout(
+    dragmode=False  # Deshabilita el modo de arrastre (zoom)
+)
 
 
 
@@ -205,6 +220,9 @@ tbl_causa_def = tbl_causa_def.sort_values(by = "Causa_defuncion_")
 fig_causa_def = px.pie(tbl_causa_def, values='count', names='Causa_defuncion_',
                   title='Causa de muerte hasta diciembre 2020',
                   color_discrete_sequence=px.colors.qualitative.Bold_r)
+fig_causa_def.update_layout(
+    dragmode=False  # Deshabilita el modo de arrastre (zoom)
+)
 
 # Dias tras el diagnostico hasta la defuncion  (fallecidos por cáncer
 # Fig
@@ -212,6 +230,9 @@ ymax = data_cancer3['dif_dias'].quantile(0.9)
 fig_dif_dias = px.box(data_cancer3, y="dif_dias", x='Año_diag',
                                         title='Días transcurridos desde el diagnóstico hasta el fallecimiento por cáncer')
 fig_dif_dias.update_yaxes(range=[0, ymax])  # Establece el rango máximo del eje Y, por ejemplo, de 0 a 100
+fig_dif_dias.update_layout(
+    dragmode=False  # Deshabilita el modo de arrastre (zoom)
+)
 
 
 
@@ -219,7 +240,7 @@ fig_dif_dias.update_yaxes(range=[0, ymax])  # Establece el rango máximo del eje
 
 # Configuración para deshabilitar todas las funciones interactivas
 config = {
-    'staticPlot': False,  # Hacer que el gráfico sea estático
+    'staticPlot': True,  # Hacer que el gráfico sea estático
     'displayModeBar': False,  # Ocultar la barra de herramientas de modo
     'scrollZoom': False,  # Deshabilitar el zoom con la rueda del ratón
     'doubleClick': 'reset',  # Deshabilitar el doble clic para restablecer el zoom
@@ -238,13 +259,14 @@ with placeholder.container():
         st.write(f'''
                  * Total de registros: **{registros_data_cancer2}**''')
         st.write("**Diagnósticos según Registro Poblacional**")
+        # st.table(tbl_diag.reset_index(drop=True))
         st.write(tbl_diag)
-        # st.write("Selección:", option)
+        
         
     with fig_col2:
         # Tabla
-        # st.write(fig_diag_ano)
-        st.plotly_chart(fig_diag_ano, config=config)
+        # st.plotly_chart(fig_diag_ano, config = config)
+        st.write(fig_diag_ano)
  
 
 st.markdown(f'#### 2. Características de los diagnosticados: {option}')       
