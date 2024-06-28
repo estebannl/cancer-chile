@@ -132,6 +132,9 @@ fig_diag_ano = px.bar(tbl_diag_ano,
               color_discrete_sequence=px.colors.qualitative.Bold,
               hover_name = 'Año_diag', hover_data= ['RPC_', 'count']
               )
+fig_diag_ano.update_layout(
+    dragmode=False  # Deshabilita el modo de arrastre (zoom)
+)
 
 # Diagnosticos por sexo
 tbl_sexo = data_cancer2['Sexo_'].value_counts().reset_index()
