@@ -115,13 +115,35 @@ tbl_diag_ano = (data_cancer2.value_counts(['Año_diag', "RPC_"])).sort_index().r
 # Fig
 fig_diag_ano = px.bar(tbl_diag_ano, 
               x="Año_diag", y="count", color="RPC_", 
+              category_orders= {'RPC_': ['Provincia de Biobío',
+                                         'Provincia de Concepción',
+                                         'Región de Antofagasta',
+                                         'Región de Arica y Parinacota',
+                                         'Región de Los Ríos',
+                                         'Región del Maule']},
               title="Diagnósticos de cáncer 1998-2019 según Registro Poblacional",
               color_discrete_sequence=px.colors.qualitative.Bold,
-              hover_name = 'Año_diag', hover_data= ['RPC_', 'count']
+              hover_data={'Año_diag':False, # remove species from hover data
+                          'RPC_': True, # customize hover for column of y attribute
+                          'count': True
+                          
+                        #   'count':':.2f', # add other column, customized formatting
+                        #   # data not in dataframe, default formatting
+                        #   'suppl_1': np.random.random(len(df)),
+                        #   # data not in dataframe, customized formatting
+                        #   'suppl_2': (':.3f', np.random.random(len(df)))
+                        }
               )
 fig_diag_ano.update_layout(
-    dragmode=False  # Deshabilita el modo de arrastre (zoom)
+    dragmode=False,  # Deshabilita el modo de arrastre (zoom)
+    hovermode="x unified",
+    showlegend=True,
+    hoverlabel_align = 'right',
+    xaxis_title= 'Año de diagnóstico',
+    yaxis_title= 'N'
+    
 )
+# fig_diag_ano.update_traces(mode="markers+lines")
 
 # Diagnosticos por sexo
 tbl_sexo = data_cancer2['Sexo_'].value_counts().sort_index().reset_index()
@@ -147,8 +169,12 @@ fig_edad = px.bar(tbl_edad, x = 'pct', y = 'Grupo_edad',
                   title = "Distribución por grupos de edad", orientation='h',
                   text_auto=True)
 fig_edad.update_layout(
-    dragmode=False  # Deshabilita el modo de arrastre (zoom)
+    dragmode=False,  # Deshabilita el modo de arrastre (zoom)
+    xaxis_title= '%',
+    yaxis_title= None
+
 )
+
 
 # Tabla Base diagnostico
 tbl_base_diag = data_cancer2.value_counts(['Base_diagnostico', 'Base_diagnostico_']).reset_index()
@@ -160,7 +186,9 @@ fig_base_diag = px.bar(tbl_base_diag, x = 'pct', y = 'Base_diagnostico_',
                   title = "Distribución según base del diagnóstico", orientation='h',
                   text_auto=True)
 fig_base_diag.update_layout(
-    dragmode=False  # Deshabilita el modo de arrastre (zoom)
+    dragmode=False,  # Deshabilita el modo de arrastre (zoom)
+    xaxis_title= '%',
+    yaxis_title= None
 )
 
 # Tabla Descriptivos por edad
@@ -225,7 +253,9 @@ fig_dif_dias = px.box(data_cancer3, y="dif_dias", x='Año_diag',
                                         title='Días transcurridos desde el diagnóstico hasta el fallecimiento por cáncer')
 fig_dif_dias.update_yaxes(range=[0, ymax])  # Establece el rango máximo del eje Y, por ejemplo, de 0 a 100
 fig_dif_dias.update_layout(
-    dragmode=False  # Deshabilita el modo de arrastre (zoom)
+    dragmode=False,  # Deshabilita el modo de arrastre (zoom)
+    xaxis_title= 'Año de diagnóstico',
+    yaxis_title= 'Días hasta fallecer por cáncer'
 )
 
 
