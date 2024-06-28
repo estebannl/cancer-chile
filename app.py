@@ -106,12 +106,12 @@ data_cancer3 = data_cancer3.assign(
 registros_data_cancer2 = data_cancer2.shape[0]
 
 # Diagnosticos totales por RPC
-tbl_diag = (data_cancer2.value_counts("RPC_")).reset_index()
+tbl_diag = (data_cancer2.value_counts("RPC_")).sort_index().reset_index()
 tbl_diag['porc'] = np.round(100*tbl_diag['count']/np.sum(tbl_diag['count']),1)
 
 # Diagnosticos por año y RPC
 # Tbl
-tbl_diag_ano = (data_cancer2.value_counts(['Año_diag', "RPC_"])).reset_index()
+tbl_diag_ano = (data_cancer2.value_counts(['Año_diag', "RPC_"])).sort_index().reset_index()
 # Fig
 fig_diag_ano = px.bar(tbl_diag_ano, 
               x="Año_diag", y="count", color="RPC_", 
@@ -124,20 +124,24 @@ fig_diag_ano.update_layout(
 )
 
 # Diagnosticos por sexo
-tbl_sexo = data_cancer2['Sexo_'].value_counts().reset_index()
+tbl_sexo = data_cancer2['Sexo_'].value_counts().sort_index().reset_index()
 tbl_sexo['pct'] = round(100*tbl_sexo['count']/np.sum(tbl_sexo['count']),1)
-tbl_sexo = tbl_sexo.sort_values(by = "Sexo_")
+# tbl_sexo = tbl_sexo.sort_values(by = "Sexo_")
 #Fig
-fig_sexo = px.pie(tbl_sexo, values='count', names='Sexo_',
+fig_sexo = px.pie(tbl_sexo, values='count', names='Sexo_', 
+                  category_orders = {'Sexo_': ['Mujer', 'Hombre']},
+                  color_discrete_sequence=px.colors.qualitative.Bold,
+                  opacity= 0.8,
                   title='Distribución por sexo')
 fig_sexo.update_layout(
     dragmode=False  # Deshabilita el modo de arrastre (zoom)
 )
 
+
 # Diagnosticos por grupo de edad
-tbl_edad = data_cancer2['Grupo_edad'].value_counts().reset_index()
+tbl_edad = data_cancer2['Grupo_edad'].value_counts().sort_index().reset_index()
 tbl_edad['pct'] = round(100*tbl_edad['count']/np.sum(tbl_edad['count']),1)
-tbl_edad = tbl_edad.sort_values(by = 'Grupo_edad')
+# tbl_edad = tbl_edad.sort_values(by = 'Grupo_edad')
 # Fig
 fig_edad = px.bar(tbl_edad, x = 'pct', y = 'Grupo_edad',
                   title = "Distribución por grupos de edad", orientation='h',
@@ -178,7 +182,8 @@ fig_hist = px.histogram(data_cancer2,
                         histnorm='probability density',   
                         marginal='box', 
                         opacity= 0.7,
-                        hover_data=data_cancer2.columns)
+                        hover_data=data_cancer2.columns,
+                        category_orders = {'Sexo_': ['Mujer', 'Hombre']})
 fig_hist.update_layout(barmode='overlay',
                        title='Distribución de la edad al diagnóstico, según sexo')
 fig_hist.update_layout(
@@ -190,9 +195,10 @@ tbl_estado = data_cancer2.value_counts(['Estado']).reset_index()
 tbl_estado['pct'] = round(100*tbl_estado['count']/np.sum(tbl_estado['count']),1)
 tbl_estado = tbl_estado.sort_values(by = "Estado")
 # Fig
-fig_estado = px.pie(tbl_estado, values='count', names='Estado',
-                  title='Estado hasta diciembre 2020',
-                  color_discrete_sequence=px.colors.qualitative.Bold_r)
+fig_estado = px.pie(tbl_estado, values='count', names='Estado', 
+                    category_orders = {'Estado': ['Fallecido', 'Vivo']},
+                    title='Estado hasta diciembre 2020',
+                    color_discrete_sequence=px.colors.qualitative.Bold_r)
 fig_estado.update_layout(
     dragmode=False  # Deshabilita el modo de arrastre (zoom)
 )
@@ -205,8 +211,9 @@ tbl_causa_def['pct'] = round(100*tbl_causa_def['count']/np.sum(tbl_causa_def['co
 tbl_causa_def = tbl_causa_def.sort_values(by = "Causa_defuncion_")
 # Fig
 fig_causa_def = px.pie(tbl_causa_def, values='count', names='Causa_defuncion_',
-                  title='Causa de muerte hasta diciembre 2020',
-                  color_discrete_sequence=px.colors.qualitative.Bold_r)
+                       category_orders = {'Causa_defuncion_': ['Cáncer', 'Otra causa']},
+                       title='Causa de muerte hasta diciembre 2020',
+                       color_discrete_sequence=px.colors.qualitative.Bold_r)
 fig_causa_def.update_layout(
     dragmode=False  # Deshabilita el modo de arrastre (zoom)
 )
